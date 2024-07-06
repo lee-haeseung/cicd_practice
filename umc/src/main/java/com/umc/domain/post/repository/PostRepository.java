@@ -12,7 +12,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<Post> findById(Long id);
 
-    Page<Post> findAllOrderByCreatedAtDesc(PageRequest pageRequest);
+    Page<Post> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 
     Page<Post> findPostsByBoardOrderByCreatedAtDesc(Board board, PageRequest pageRequest);
 

@@ -4,6 +4,7 @@ import com.umc.domain.comment.dto.CommentListPesponseDTO;
 import com.umc.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class PostResponseDTO {
     private String status;
     private Long boardId;
     private Long posterId;
+    private String postImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private CommentListPesponseDTO commentList;
@@ -30,6 +32,7 @@ public class PostResponseDTO {
         status = post.getStatus();
         boardId = post.getBoard().getId();
         posterId = post.getPoster().getId();
+        postImageUrl = post.getPostImage() != null ? post.getPostImage().getUrl() : "";
         createdAt = post.getCreatedAt();
         modifiedAt = post.getModifiedAt();
         commentList = new CommentListPesponseDTO(post.getComments() != null ? post.getComments() : new ArrayList<>());

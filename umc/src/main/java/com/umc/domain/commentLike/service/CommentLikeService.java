@@ -2,12 +2,12 @@ package com.umc.domain.commentLike.service;
 
 import com.umc.common.exception.handler.CommentHandler;
 import com.umc.common.exception.handler.UserHandler;
+import com.umc.common.jwt.SecurityUtil;
 import com.umc.common.response.ApiResponse;
 import com.umc.common.response.status.ErrorCode;
 import com.umc.common.response.status.SuccessCode;
 import com.umc.domain.comment.entity.Comment;
 import com.umc.domain.comment.repository.CommentRepository;
-import com.umc.domain.commentLike.dto.CommentLikeCreateRequestDTO;
 import com.umc.domain.commentLike.entity.CommentLike;
 import com.umc.domain.commentLike.repository.CommentLikeRepository;
 import com.umc.domain.user.entity.Member;
@@ -23,8 +23,8 @@ public class CommentLikeService {
     private final MemberRepository memberRepository;
     private final CommentLikeRepository commentLikeRepository;
 
-    public ApiResponse<String> likeOrCancel(Long commentId, CommentLikeCreateRequestDTO commentLikeCreateRequestDTO) {
-        Member member = memberRepository.findById(commentLikeCreateRequestDTO.getMemberId()).orElseThrow(() -> new UserHandler(ErrorCode.MEMBER_NOT_FOUND));
+    public ApiResponse<String> likeOrCancel(Long commentId) {
+        Member member = memberRepository.findByEmail(SecurityUtil.getCurrentUserEmail()).orElseThrow(() -> new UserHandler(ErrorCode._UNAUTHORIZED));
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentHandler(ErrorCode.COMMENT_NOT_EXIST));
 
         if (commentLikeRepository.existsByMemberAndComment(member, comment)) {

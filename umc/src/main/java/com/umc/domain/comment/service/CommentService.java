@@ -3,6 +3,7 @@ package com.umc.domain.comment.service;
 import com.umc.common.exception.handler.CommentHandler;
 import com.umc.common.exception.handler.PostHandler;
 import com.umc.common.exception.handler.UserHandler;
+import com.umc.common.jwt.SecurityUtil;
 import com.umc.common.response.ApiResponse;
 import com.umc.common.response.status.ErrorCode;
 import com.umc.common.response.status.SuccessCode;
@@ -30,7 +31,7 @@ public class CommentService {
     private final MemberRepository memberRepository;
 
     public ApiResponse<CommentResponseDTO> createComment(CommentCreateRequestDTO commentCreateRequestDTO) {
-        Member commenter = memberRepository.findById(commentCreateRequestDTO.getCommenterId()).orElseThrow(() -> new UserHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member commenter = memberRepository.findByEmail(SecurityUtil.getCurrentUserEmail()).orElseThrow(() -> new UserHandler(ErrorCode._UNAUTHORIZED));
         Post post = postRepository.findById(commentCreateRequestDTO.getPostId()).orElseThrow(() -> new PostHandler(ErrorCode.POST_NOT_EXIST));
 
         Comment comment = Comment.builder()

@@ -2,12 +2,12 @@ package com.umc.domain.postLike.service;
 
 import com.umc.common.exception.handler.PostHandler;
 import com.umc.common.exception.handler.UserHandler;
+import com.umc.common.jwt.SecurityUtil;
 import com.umc.common.response.ApiResponse;
 import com.umc.common.response.status.ErrorCode;
 import com.umc.common.response.status.SuccessCode;
 import com.umc.domain.post.entity.Post;
 import com.umc.domain.post.repository.PostRepository;
-import com.umc.domain.postLike.dto.PostLikeCreateRequestDTO;
 import com.umc.domain.postLike.entity.PostLike;
 import com.umc.domain.postLike.repository.PostLikeRepository;
 import com.umc.domain.user.entity.Member;
@@ -23,8 +23,8 @@ public class PostLikeService {
     private final MemberRepository memberRepository;
     private final PostLikeRepository postLikeRepository;
 
-    public ApiResponse<String> likeOrCancel(Long postId, PostLikeCreateRequestDTO postLikeCreateRequestDTO) {
-        Member member = memberRepository.findById(postLikeCreateRequestDTO.getMemberId()).orElseThrow(() -> new UserHandler(ErrorCode.MEMBER_NOT_FOUND));
+    public ApiResponse<String> likeOrCancel(Long postId) {
+        Member member = memberRepository.findByEmail(SecurityUtil.getCurrentUserEmail()).orElseThrow(() -> new UserHandler(ErrorCode._UNAUTHORIZED));
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostHandler(ErrorCode.POST_NOT_EXIST));
 
         if (postLikeRepository.existsByMemberAndPost(member, post)) {

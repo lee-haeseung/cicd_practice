@@ -52,4 +52,8 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @Builder.Default
     private List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private PostImage postImage;
 }
