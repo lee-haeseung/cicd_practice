@@ -1,25 +1,21 @@
 package com.umc.domain.user.entity;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import jakarta.persistence.*;
-
 import com.umc.common.entity.BaseTimeEntity;
 import com.umc.domain.comment.entity.Comment;
 import com.umc.domain.post.entity.Post;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -44,9 +40,11 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private String nickname; // 닉네임
 
     @OneToMany(mappedBy = "poster")
+    @Builder.Default
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "commenter")
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     @Column
