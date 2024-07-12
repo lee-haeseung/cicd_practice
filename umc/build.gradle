@@ -41,6 +41,9 @@ dependencies {
 
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    implementation 'javax.mail:mail:1.4.7'
+    implementation 'org.springframework:spring-context-support:5.3.9'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
 }
 
 tasks.named('bootBuildImage') {

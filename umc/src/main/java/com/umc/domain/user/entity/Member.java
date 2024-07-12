@@ -33,6 +33,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private Long id;
 
     @Column
+    private String identifier; // 로그인 아이디
+    @Column
     private String email; // 이메일
     @Column
     private String password; // 비밀번호
