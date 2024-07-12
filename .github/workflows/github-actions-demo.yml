@@ -4,7 +4,7 @@ name: CI/CD using GitHub Actions & Docker
 # Event trigger: main 브랜치에 push가 되었을 때 실행
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 permissions:
   contents: read
