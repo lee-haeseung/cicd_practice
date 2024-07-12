@@ -17,7 +17,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping(value = "/posts/wpw", consumes = "multipart/form-data") // 생성
+    @PostMapping(value = "/posts", consumes = "multipart/form-data") // 생성
     public ApiResponse<PostResponseDTO> createPost(@ModelAttribute PostCreateRequestDTO postCreateRequestDTO) {
         System.out.println(postCreateRequestDTO);
         return postService.createPost(postCreateRequestDTO);
