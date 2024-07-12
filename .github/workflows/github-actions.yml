@@ -62,6 +62,7 @@ jobs:
           script: |
             whoami
             sudo docker ps
+            sudo docker ps -q --filter "ancestor=${{ secrets.DOCKER_USERNAME }}/docker-test-prod" | xargs -r sudo docker stop | xargs -r sudo docker rm
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
             sudo docker image prune -f
