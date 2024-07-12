@@ -25,7 +25,7 @@ jobs:
       - name: Make application.yml
         run: |
           mkdir -p ./src/main/resources # resources 폴더 생성
-          cd ./src/main/resources # resources Q폴더로 이동
+          cd ./src/main/resources # resources 폴더로 이동
           touch ./application.yml # application.yml 생성
           echo "${{ secrets.YML }}" > ./application.yml # GitHub Actions에서 설정한 값을 application.yml 파일에 쓰기
         shell: bash
@@ -56,13 +56,18 @@ jobs:
         with:
           host: ${{ secrets.HOST_PROD }} # EC2 퍼블릭 IPv4 DNS
           username: ubuntu
-          port : 22
+          port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           #envs: GITHUB_SHA
           script: |
             whoami
-            sudo docker ps
+            sudo docker ps -a
+            # 기존 컨테이너를 중지하고 삭제
             sudo docker ps -q --filter "ancestor=${{ secrets.DOCKER_USERNAME }}/docker-test-prod" | xargs -r sudo docker stop | xargs -r sudo docker rm
+            # 포트 8080이 이미 사용 중인지 확인
+            sudo lsof -i :8080
+            # 이미지 업데이트 및 새로운 컨테이너 실행
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
             sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            # 사용하지 않는 이미지 정리
             sudo docker image prune -f
