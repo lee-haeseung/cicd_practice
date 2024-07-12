@@ -58,16 +58,26 @@ jobs:
           username: ubuntu
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
-          #envs: GITHUB_SHA
           script: |
             whoami
+
+            # 현재 컨테이너 상태 확인
+            echo "Listing all Docker containers:"
             sudo docker ps -a
-            # 기존 컨테이너를 중지하고 삭제
-            sudo docker ps -q --filter "ancestor=${{ secrets.DOCKER_USERNAME }}/docker-test-prod" | xargs -r sudo docker stop | xargs -r sudo docker rm
-            # 포트 8080이 이미 사용 중인지 확인
+
+            # 8080 포트를 사용하는 컨테이너 중지 및 삭제
+            echo "Stopping and removing containers using port 8080:"
+            sudo docker ps -q --filter "publish=8080" | xargs -r sudo docker stop | xargs -r sudo docker rm
+
+            # 기존 컨테이너 삭제 후 8080 포트 사용 상태 확인
+            echo "Checking port 8080 usage:"
             sudo lsof -i :8080
-            # 이미지 업데이트 및 새로운 컨테이너 실행
+
+            # 새로운 이미지로 컨테이너 실행
+            echo "Pulling the latest Docker image and running a new container:"
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
-            sudo docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker run -d -p 8080:8080 --name my-app ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+
             # 사용하지 않는 이미지 정리
+            echo "Pruning unused Docker images:"
             sudo docker image prune -f
