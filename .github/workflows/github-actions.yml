@@ -65,6 +65,9 @@ jobs:
             echo "Listing all Docker containers:"
             sudo docker ps -a
 
+            sudo docker stop my-app
+            sudo docker rm my-app
+
             # 8080 포트를 사용하는 컨테이너 중지 및 삭제
             echo "Stopping and removing containers using port 8080:"
             sudo docker ps -q --filter "publish=8080" | xargs -r sudo docker stop | xargs -r sudo docker rm
